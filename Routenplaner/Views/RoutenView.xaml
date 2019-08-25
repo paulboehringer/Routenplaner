@@ -15,8 +15,8 @@
         <Button Content="Karte anzeigen" HorizontalAlignment="Left" Margin="620,40,0,0" VerticalAlignment="Top" Width="137" Height="30" Command="{Binding DisplayMapCommand}" />
         <Button Content="Routen Info" HorizontalAlignment="Left" Margin="620,80,0,0" VerticalAlignment="Top" Width="137" Height="30" Command="{Binding DisplayDirectionsCommand}" />
         <Button Content="Felder leeren" HorizontalAlignment="Left" Margin="620,120,0,0" VerticalAlignment="Top" Width="137" Height="30" Command="{Binding ClearFieldsCommand}" />
-        <Image Name="StaticMap" Height="500" Width="800" Margin="0,140,-15,22.5" Source="{Binding RoutenModel.Image1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Name="RouteInfo" Height="540" Width="800" Margin="120,100,0,0" Text="{Binding RoutenModel.Directions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Image Name="StaticMap" Height="500" Width="800" Margin="0,140,-15,22.5" Source="{Binding RoutenModel.MapView, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Name="RouteInfo" Margin="50,166,20,18.5" Text="{Binding RoutenModel.Directions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content ="{Binding RoutenModel.Error, Mode=OneWay}" Foreground="Red" HorizontalAlignment="Left" Height="34" Margin="50,720,0,0" VerticalAlignment="Top" Width="800" FontSize="14"/>
     </Grid>
 </Window>

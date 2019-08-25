@@ -11,7 +11,7 @@ namespace Services.Directions
 {
     public class Directions: IDirections, IDisposable
     {
-        private const string baseUrl = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyD8Lo3lGuAO3TBML-LPZWjA7T4nAA4eB_k";
+        private const string baseUrl = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyD8Lo3lGuAO3TBML-LPZWjA7T4nAA4eB_k&language=de";
 
         readonly HttpClient client;
 

@@ -15,7 +15,7 @@ namespace Services.GeoCoding
 
         public GeoCoding()
         {
-            geocoder = new GoogleGeocoder() { ApiKey = apiKey };
+            geocoder = new GoogleGeocoder() { ApiKey = apiKey, Language = "de" };
         }
 
         public async Task<IEnumerable<LocationDto>> GetAdresses(string data)

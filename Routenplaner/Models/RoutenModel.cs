@@ -72,18 +72,18 @@ namespace Routenplaner.Models
             }
         }
 
-        private ImageSource image1;
+        private ImageSource mapView;
 
-        public ImageSource Image1
+        public ImageSource MapView
         {
             get
             {
-                return image1;
+                return mapView;
             }
             set
             {
-                SetProperty(ref image1, value);
-                RaisePropertyChanged(nameof(Image1));
+                SetProperty(ref mapView, value);
+                RaisePropertyChanged(nameof(MapView));
             }
         }
 

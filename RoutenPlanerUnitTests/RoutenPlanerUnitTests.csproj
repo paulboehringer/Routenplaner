@@ -56,6 +56,7 @@
     <Reference Include="Moq.AutoMock, Version=1.2.0.120, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.AutoMock.1.2.0.120\lib\net45\Moq.AutoMock.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Prism, Version=7.2.0.1367, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.7.2.0.1367\lib\net45\Prism.dll</HintPath>
     </Reference>

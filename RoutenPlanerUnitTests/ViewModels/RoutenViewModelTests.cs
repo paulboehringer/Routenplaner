@@ -6,7 +6,6 @@ using Services.Core;
 using Services.Directions;
 using Services.GeoCoding;
 using Services.StaticMaps;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -18,11 +17,11 @@ namespace RoutenPlanerUnitTests.ViewModels
     {
         #region Constants and private vars
         const string origin = "Breiteweg 17, 30, 06 Bern";
-        const string via = "Olten";
+        const string via = "Ziegelfeldstrasse, 4600 Olten";
         const string destination = "Zürich Flughafen, 8302 Kloten";
-        const string retOrigin = "Breiteweg 17, 30, 06 Bern, Switzerland";
-        const string retVia = "Olten, Switzerland";
-        const string retDstination = "Zürich Flughafen, 8302 Kloten, Switzerland";
+        const string retOrigin = "Breiteweg 17, 30, 06 Bern, Schweiz";
+        const string retVia = "Ziegelfeldstrasse, 4600 Olten, Schweiz";
+        const string retDstination = "Zürich Flughafen, 8302 Kloten, Schweiz";
 
         private RoutenViewModel viewModel;
         private AutoMocker autoMocker;
@@ -97,6 +96,79 @@ namespace RoutenPlanerUnitTests.ViewModels
         }
 
         [TestMethod]
+        public void DisplayDirectionsReturnsErrorIfOriginFieldIsEmpty()
+        {
+            // Arrange
+            viewModel.RoutenModel.Origin = string.Empty;
+
+            // Act
+            viewModel.DisplayDirectionsCommand.Execute();
+
+            // Assert
+            Assert.IsFalse(string.IsNullOrEmpty(viewModel.RoutenModel.Error));
+        }
+
+        [TestMethod]
+        public void DisplayDirectionsReturnsErrorIfDestinationFieldIsEmpty()
+        {
+            // Arrange
+            viewModel.RoutenModel.Destination = string.Empty;
+
+            // Act
+            viewModel.DisplayDirectionsCommand.Execute();
+
+            // Assert
+            Assert.IsFalse(string.IsNullOrEmpty(viewModel.RoutenModel.Error));
+        }
+
+        [TestMethod]
+        public void DisplayDirectionsReturnsDirectionsIfOriginAndDestinationAreSet()
+        {
+            // Arrange
+            SetupGeoCodingMock(geoCodingMock);
+            SetupDirectionsMock(directionsMock);
+
+            // Act
+            viewModel.DisplayDirectionsCommand.Execute();
+
+            // Assert
+            Assert.IsTrue(string.IsNullOrEmpty(viewModel.RoutenModel.Error));
+            Assert.IsNull(viewModel.RoutenModel.MapView);
+            Assert.IsTrue(viewModel.RoutenModel.Directions.Length > 0);
+        }
+
+        [TestMethod]
+        public void DisplayDirectionsReturnsErrorIfOriginIsEmpty()
+        {
+            // Arrange
+            SetupGeoCodingMock(geoCodingMock);
+            SetupDirectionsMock(directionsMock);
+            viewModel.RoutenModel.Origin = string.Empty;
+
+            // Act
+            viewModel.DisplayDirectionsCommand.Execute();
+
+            // Assert
+            Assert.IsFalse(string.IsNullOrEmpty(viewModel.RoutenModel.Error));
+        }
+
+        [TestMethod]
+        public void DisplayDirectionsReturnsErrorIfDestinationIsEmpty()
+        {
+            // Arrange
+            SetupGeoCodingMock(geoCodingMock);
+            SetupDirectionsMock(directionsMock);
+            viewModel.RoutenModel.Destination = string.Empty;
+
+            // Act
+            viewModel.DisplayDirectionsCommand.Execute();
+
+            // Assert
+            Assert.IsFalse(string.IsNullOrEmpty(viewModel.RoutenModel.Error));
+        }
+
+
+        [TestMethod]
         public void DisposeTest()
         {
             // Constructor of viewModel works as designed
@@ -121,7 +193,7 @@ namespace RoutenPlanerUnitTests.ViewModels
             geoCodingMock.Reset();
             geoCodingMock.Setup(result => result.GetAdresses(origin)).Returns(Task.FromResult(GetLocations(0)));
             geoCodingMock.Setup(result => result.GetAdresses(via)).Returns(Task.FromResult(GetLocations(1)));
-            geoCodingMock.Setup(result => result.GetAdresses(destination)).Returns(Task.FromResult(GetLocations(3)));
+            geoCodingMock.Setup(result => result.GetAdresses(destination)).Returns(Task.FromResult(GetLocations(2)));
         }
 
         private void SetupStaticMapsMock(Mock<IStaticMaps> staticMapsMock)
@@ -130,13 +202,19 @@ namespace RoutenPlanerUnitTests.ViewModels
             staticMapsMock.Setup(result => result.GetMap(It.IsAny<IEnumerable<LocationDto>>())).Returns(Task.FromResult(GetMap()));
         }
 
+        private void SetupDirectionsMock(Mock<IDirections> directionsMock)
+        {
+            directionsMock.Reset();
+            directionsMock.Setup(result => result.GetDirections(It.IsAny<IEnumerable<LocationDto>>())).Returns(Task.FromResult(GetDirection()));
+        }
+        
         private IEnumerable<LocationDto> GetLocations(int counter)
         {
             var locations = new List<LocationDto>()
             {
                 new LocationDto() { FormatedAddress = retOrigin, Longitude = 40, Latitude = 7, Error = string.Empty },
-                new LocationDto() { FormatedAddress = retVia, Longitude = 40, Latitude = 7, Error = string.Empty },
-                new LocationDto() { FormatedAddress = retDstination, Longitude = 40, Latitude = 7, Error = string.Empty}
+                new LocationDto() { FormatedAddress = retVia, Longitude = 41, Latitude = 8, Error = string.Empty },
+                new LocationDto() { FormatedAddress = retDstination, Longitude = 42, Latitude = 9, Error = string.Empty}
             };
 
             yield return locations[counter];
@@ -152,6 +230,50 @@ namespace RoutenPlanerUnitTests.ViewModels
                 dto.Stream.Write(bytes, 0, (int)file.Length);
             }
             return dto;
+        }
+
+        private DirectionDto GetDirection()
+        {
+            var Legs = new List<Leg>
+            {
+                {
+                    new Leg()
+                    {
+                        distance = new Distance() { text = "10 km"},
+                        duration = new Duration() { text = "15 min"},
+                        steps = new List<Step>()
+                        {
+                            new Step()
+                            {
+                                distance = new Distance2() { text = "2 km"},
+                                duration = new Duration2() { text = "3 min"},
+                                html_instructions = "Goto somewhere"
+                            },
+                            new Step()
+                            {
+                                distance = new Distance2() { text = "8 km"},
+                                duration = new Duration2() { text = "12 min"},
+                                html_instructions = "Goto somewhere elsde"
+                            }
+                        }
+                    }
+                }
+            };
+
+            return new DirectionDto()
+            {
+                Directions = "TestDirections", Routes = new RootObject()
+                {
+                    routes = new List<Route>()
+                    {
+                        new Route()
+                        {
+                            legs = Legs
+                        }
+                    },
+                    status="OK"
+                }
+            };
         }
 
         #endregion private methods

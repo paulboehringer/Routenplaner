@@ -92,7 +92,7 @@ namespace Routenplaner.ViewModels
             RoutenModel.Origin = String.Empty;
             RoutenModel.Waypoint = String.Empty;
             RoutenModel.Destination = String.Empty;
-            RoutenModel.Image1 = null;
+            RoutenModel.MapView = null;
         }
         #endregion ClearFields
 
@@ -106,12 +106,13 @@ namespace Routenplaner.ViewModels
 
         private async void DisplayDirections()
         {
-            RoutenModel.Image1 = null;
+            RoutenModel.MapView = null;
             RoutenModel.Directions = string.Empty;
             RoutenModel.Error = string.Empty;
-            var addresses = await GetAddresses();
-            if (addresses.Count() > 1)
+
+            if (!string.IsNullOrEmpty(RoutenModel.Origin) && !string.IsNullOrEmpty(RoutenModel.Destination))
             {
+                var addresses = await GetAddresses();
                 var dto = await directions.GetDirections(addresses);
                 if (dto.Routes.status != "OK")
                 {
@@ -130,7 +131,8 @@ namespace Routenplaner.ViewModels
                         sb.Append(item.distance.text);
                         sb.Append("\t");
                         sb.Append(item.duration.text);
-                        sb.Append("\t");
+                        if (item.duration.text.Contains("Minuten")) sb.Append("\t");
+                        else sb.Append("\t\t");
                         sb.Append(StripHtml(item.html_instructions));
                         sb.Append(Environment.NewLine);
                     }
@@ -139,13 +141,8 @@ namespace Routenplaner.ViewModels
             }
             else
             {
-                RoutenModel.Error = "Es müssen zumindest 2 Felder ausgefüllt sein.";
+                RoutenModel.Error = "Es müssen zumindest die Felder 'von' und 'nach' ausgefüllt sein.";
             }
-        }
-
-        protected string StripHtml(string Txt)
-        {
-            return Regex.Replace(Txt, "<(.|\\n)*?>", string.Empty);
         }
 
         #endregion DisplayDirections
@@ -170,7 +167,7 @@ namespace Routenplaner.ViewModels
                 {
                     bitmap.StreamSource = dto.Stream;
                     bitmap.EndInit();
-                    RoutenModel.Image1 = bitmap;
+                    RoutenModel.MapView = bitmap;
                     RoutenModel.Error = string.Empty;
                     RoutenModel.Directions = string.Empty;
                 }
@@ -185,6 +182,11 @@ namespace Routenplaner.ViewModels
         #endregion DelegateCommands
 
         #region private functions
+        private string StripHtml(string Txt)
+        {
+            return Regex.Replace(Txt, "<(.|\\n)*?>", string.Empty);
+        }
+
         private async Task<List<LocationDto>> GetAddresses()
         {
             string origin = RoutenModel.Origin;
