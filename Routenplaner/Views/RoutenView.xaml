@@ -1,0 +1,22 @@
+﻿<Window x:Class="Routenplaner.Views.RoutenView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="RoutenPlaner" Height="800" Width="875">
+    <Grid x:Name = "DataGrid">
+        <Label Content="von" HorizontalAlignment="Left" Height="34" Margin="50,40,0,0" VerticalAlignment="Top" Width="69" FontSize="14"/>
+        <Label Content="via" HorizontalAlignment="Left" Height="34" Margin="50,80,0,0" VerticalAlignment="Top" Width="69" FontSize="14"/>
+        <Label Content="nach" HorizontalAlignment="Left" Height="34" Margin="50,120,0,0" VerticalAlignment="Top" Width="69" FontSize="14"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="120,45,0,0" TextWrapping="Wrap" Text="{Binding RoutenModel.Origin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="405"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="120,85,0,0" TextWrapping="Wrap" Text="{Binding RoutenModel.Waypoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="405"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="120,125,0,0" TextWrapping="Wrap" Text="{Binding RoutenModel.Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="405" />
+        <Button Content="Karte anzeigen" HorizontalAlignment="Left" Margin="620,40,0,0" VerticalAlignment="Top" Width="137" Height="30" Command="{Binding DisplayMapCommand}" />
+        <Button Content="Routen Info" HorizontalAlignment="Left" Margin="620,80,0,0" VerticalAlignment="Top" Width="137" Height="30" Command="{Binding DisplayDirectionsCommand}" />
+        <Button Content="Felder leeren" HorizontalAlignment="Left" Margin="620,120,0,0" VerticalAlignment="Top" Width="137" Height="30" Command="{Binding ClearFieldsCommand}" />
+        <Image Name="StaticMap" Height="500" Width="800" Margin="0,140,-15,22.5" Source="{Binding RoutenModel.Image1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Name="RouteInfo" Height="540" Width="800" Margin="120,100,0,0" Text="{Binding RoutenModel.Directions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content ="{Binding RoutenModel.Error, Mode=OneWay}" Foreground="Red" HorizontalAlignment="Left" Height="34" Margin="50,720,0,0" VerticalAlignment="Top" Width="800" FontSize="14"/>
+    </Grid>
+</Window>
