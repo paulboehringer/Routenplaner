@@ -9,9 +9,12 @@ using System.Threading.Tasks;
 
 namespace Services.StaticMaps
 {
+    /// <summary>
+    /// The static maps service. Retrieves asynchron a map as gif file from google
+    /// </summary>
     public class StaticMaps: IStaticMaps, IDisposable
     {
-        private const string baseUrl = "https://maps.googleapis.com/maps/api/staticmap?&key=AIzaSyD8Lo3lGuAO3TBML-LPZWjA7T4nAA4eB_k&format=gif&size=800x500&maptype=roadmap";
+        private const string baseUrl = "https://maps.googleapis.com/maps/api/staticmap?&key=AIzaSyD8Lo3lGuAO3TBML-LPZWjA7T4nAA4eB_k&format=gif&size=800x600&maptype=roadmap";
         readonly HttpClient client;
         
         public StaticMaps()
@@ -78,9 +81,9 @@ namespace Services.StaticMaps
             var label = "V";
             foreach (var item in locations)
             {
-                if (counter == 0) { color = "blue"; label = "S";  }
-                else if (counter == locations.Count()-1) { color = "green"; label = "Z";  }
-                else if (counter > 0 && counter < locations.Count() - 1) { color = "red"; label = "V"; }
+                if (item.LocationType == LocationType.Origin) { color = "blue"; label = "S";  }
+                else if (item.LocationType == LocationType.Destination) { color = "green"; label = "Z";  }
+                else if (item.LocationType == LocationType.WayPoint) { color = "red"; label = "V"; }
                 qsb.Append("markers", GetMarker(item, color, label));
                 counter++;
             }

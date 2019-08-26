@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace Services.GeoCoding
 {
+    /// <summary>
+    /// Uses GeoCoding.Core and GeoCoding.Google to transfer a location to coordinates
+    /// </summary>
     public class GeoCoding : IGeoCoding
     {
         private const string apiKey = "AIzaSyD8NRnffjViotGemHdsVfW3S4i3sbrWbPk";
         private IEnumerable<Address> addresses;
         private IGeocoder geocoder;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public GeoCoding()
         {
             geocoder = new GoogleGeocoder() { ApiKey = apiKey, Language = "de" };

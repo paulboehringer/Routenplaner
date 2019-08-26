@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace RoutenPlanerUnitTests.ViewModels
 {
+    /// <summary>
+    /// Test class for RoutenVieModel
+    /// </summary>
     [TestClass]
     public class RoutenViewModelTests
     {
@@ -239,21 +242,21 @@ namespace RoutenPlanerUnitTests.ViewModels
                 {
                     new Leg()
                     {
-                        distance = new Distance() { text = "10 km"},
-                        duration = new Duration() { text = "15 min"},
-                        steps = new List<Step>()
+                        Distance = new Distance() { Text = "10 km"},
+                        Duration = new Duration() { Text = "15 min"},
+                        Steps = new List<Step>()
                         {
                             new Step()
                             {
-                                distance = new Distance2() { text = "2 km"},
-                                duration = new Duration2() { text = "3 min"},
-                                html_instructions = "Goto somewhere"
+                                Distance = new Distance2() { Text = "2 km"},
+                                Duration = new Duration2() { Text = "3 min"},
+                                Html_instructions = "Goto somewhere"
                             },
                             new Step()
                             {
-                                distance = new Distance2() { text = "8 km"},
-                                duration = new Duration2() { text = "12 min"},
-                                html_instructions = "Goto somewhere elsde"
+                                Distance = new Distance2() { Text = "8 km"},
+                                Duration = new Duration2() { Text = "12 min"},
+                                Html_instructions = "Goto somewhere elsde"
                             }
                         }
                     }
@@ -264,14 +267,14 @@ namespace RoutenPlanerUnitTests.ViewModels
             {
                 Directions = "TestDirections", Routes = new RootObject()
                 {
-                    routes = new List<Route>()
+                    Routes = new List<Route>()
                     {
                         new Route()
                         {
-                            legs = Legs
+                            Legs = Legs
                         }
                     },
-                    status="OK"
+                    Status="OK"
                 }
             };
         }

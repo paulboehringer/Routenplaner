@@ -14,8 +14,11 @@
             }
             set
             {
-                latitude = value;
-                GetFormatedLatLon();
+                if (latitude != value)
+                {
+                    latitude = value;
+                    GetFormatedLatLon();
+                }
             }
         }
 
@@ -28,8 +31,11 @@
             }
             set
             {
-                longitude = value;
-                GetFormatedLatLon();
+                if (longitude != value)
+                {
+                    longitude = value;
+                    GetFormatedLatLon();
+                }
             }
         }
         public string FormatedAddress { get; set; }

@@ -11,7 +11,12 @@ namespace Routenplaner.Views
     /// </summary>
     public partial class RoutenView : Window
     {
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="geoCoding"></param>
+        /// <param name="staticMaps"></param>
+        /// <param name="directions"></param>
         public RoutenView(IGeoCoding geoCoding, IStaticMaps staticMaps, IDirections directions)
         {
             InitializeComponent();

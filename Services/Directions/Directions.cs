@@ -9,6 +9,9 @@ using System.Web.Script.Serialization;
 
 namespace Services.Directions
 {
+    /// <summary>
+    /// The directions service returns asynchron a list of directions 
+    /// </summary>
     public class Directions: IDirections, IDisposable
     {
         private const string baseUrl = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyD8Lo3lGuAO3TBML-LPZWjA7T4nAA4eB_k&language=de";
@@ -28,10 +31,10 @@ namespace Services.Directions
                 return new DirectionDto()
                 {
                     Directions = string.Empty,
-                    Error = "Es muss mindestens eines der Felder Von, Via oder Nach ausgewählt werden!"
+                    Error = "Die Felder 'Von' oder 'Nach' müssen beide ausgefüllt sein!"
                 };
             }
-
+              
             string jsonResult = null;
 
             try

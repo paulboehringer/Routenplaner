@@ -15,6 +15,9 @@ using System.Windows.Media.Imaging;
 
 namespace Routenplaner.ViewModels
 {
+    /// <summary>
+    /// View model for RoutenView
+    /// </summary>
     public class RoutenViewModel : BindableBase, IDisposable
     {
         #region private properties
@@ -64,13 +67,13 @@ namespace Routenplaner.ViewModels
         #endregion Constructor
 
         #region EventHandler
-        private void OnOriginChanging(object sender, OriginChangingEventArgs args)
+        private void OnOriginChanging(object sender, FieldChangingEventArgs args)
         {
             DisplayMapCanExecute = args.CanDisplay;
             DisplayMapCommand.RaiseCanExecuteChanged();
         }
 
-        private void OnDesinationChanging(object sender, OriginChangingEventArgs args)
+        private void OnDesinationChanging(object sender, FieldChangingEventArgs args)
         {
             DisplayDirectionsCanExecute = args.CanDisplay;
             DisplayDirectionsCommand.RaiseCanExecuteChanged();
@@ -114,26 +117,26 @@ namespace Routenplaner.ViewModels
             {
                 var addresses = await GetAddresses();
                 var dto = await directions.GetDirections(addresses);
-                if (dto.Routes.status != "OK")
+                if (dto.Routes.Status != "OK")
                 {
-                    RoutenModel.Error = "Fehler von Google: " + dto.Routes.status + " Bitte geben Sie das Feld Via genauer an!";
+                    RoutenModel.Error = "Fehler von Google: " + dto.Routes.Status + " Bitte geben Sie das Feld Via genauer an!";
                 }
                 else
                 {
                     var sb = new StringBuilder();
-                    sb.Append(dto.Routes.routes[0].legs[0].distance.text);
+                    sb.Append(dto.Routes.Routes[0].Legs[0].Distance.Text);
                     sb.Append("\t");
-                    sb.Append(dto.Routes.routes[0].legs[0].duration.text);
+                    sb.Append(dto.Routes.Routes[0].Legs[0].Duration.Text);
                     sb.Append(Environment.NewLine);
 
-                    foreach (var item in dto.Routes.routes[0].legs[0].steps)
+                    foreach (var item in dto.Routes.Routes[0].Legs[0].Steps)
                     {
-                        sb.Append(item.distance.text);
+                        sb.Append(item.Distance.Text);
                         sb.Append("\t");
-                        sb.Append(item.duration.text);
-                        if (item.duration.text.Contains("Minuten")) sb.Append("\t");
+                        sb.Append(item.Duration.Text);
+                        if (item.Duration.Text.Contains("Minuten")) sb.Append("\t");
                         else sb.Append("\t\t");
-                        sb.Append(StripHtml(item.html_instructions));
+                        sb.Append(StripHtml(item.Html_instructions));
                         sb.Append(Environment.NewLine);
                     }
                     RoutenModel.Directions = sb.ToString();
@@ -233,6 +236,27 @@ namespace Routenplaner.ViewModels
                 {
                     RoutenModel.Error = dto.Error;
                     return null;
+                }
+            }
+
+            if (RoutenModel.Waypoints.Count() > 0)
+            {
+                foreach (var item in RoutenModel.Waypoints)
+                {
+                    if (string.IsNullOrEmpty(item.FormatedAddress)) { continue; }
+                    address = await geoCoding.GetAdresses(item.FormatedAddress);
+                    var dto = address.First();
+                    if (string.IsNullOrEmpty(dto.Error))
+                    {
+                        dto.LocationType = LocationType.WayPoint;
+                        addresses.Add(dto);
+                        item.FormatedAddress = dto.FormatedAddress;
+                    }
+                    else
+                    {
+                        RoutenModel.Error = dto.Error;
+                        return null;
+                    }
                 }
             }
 

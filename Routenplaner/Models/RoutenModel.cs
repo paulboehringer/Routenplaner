@@ -1,17 +1,28 @@
 ﻿using Prism.Mvvm;
+using Services.Core;
+using System.Collections.Generic;
 using System.Windows.Media;
 
 namespace Routenplaner.Models
 {
+    /// <summary>
+    /// The model for the view RoutenView
+    /// </summary>
     public class RoutenModel : BindableBase
     {
         private EventOriginChanging origChangingEvent;
         private EventDestinationChanging destChangingEvent;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="origChangingEvent"></param>
+        /// <param name="destChangingEvent"></param>
         public RoutenModel(EventOriginChanging origChangingEvent, EventDestinationChanging destChangingEvent)
         {
             this.origChangingEvent = origChangingEvent;
             this.destChangingEvent = destChangingEvent;
+            Waypoints = new List<LocationDto>();
         }
 
         #region Properties
@@ -29,8 +40,8 @@ namespace Routenplaner.Models
                 if (origin == value) { return; }
                 SetProperty(ref origin, value);
                 RaisePropertyChanged(nameof(Origin));
-                origChangingEvent.Publish(new OriginChangingEventArgs() { CanDisplay = !string.IsNullOrEmpty(origin) });
-                destChangingEvent.Publish(new OriginChangingEventArgs()
+                origChangingEvent.Publish(new FieldChangingEventArgs() { CanDisplay = !string.IsNullOrEmpty(origin) });
+                destChangingEvent.Publish(new FieldChangingEventArgs()
                 {
                     CanDisplay = !string.IsNullOrEmpty(origin) && !string.IsNullOrEmpty(destination)
                 });
@@ -45,10 +56,25 @@ namespace Routenplaner.Models
             {
                 return waypoint;
             }
-            set
+           set
             {
                 SetProperty(ref waypoint, value);
-                RaisePropertyChanged(nameof(Waypoint));
+                 RaisePropertyChanged(nameof(Waypoint));
+            }
+        }
+
+        private List<LocationDto> waypoints;
+
+        public List<LocationDto> Waypoints
+        {
+            get
+            {
+                return waypoints;
+            }
+            set
+            {
+                SetProperty(ref waypoints, value);
+                RaisePropertyChanged(nameof(Waypoints));
             }
         }
 
@@ -65,7 +91,7 @@ namespace Routenplaner.Models
                 RaisePropertyChanged(nameof(Destination));
                 if (destination == value) { return; }
                 SetProperty(ref destination, value);
-                destChangingEvent.Publish(new OriginChangingEventArgs()
+                destChangingEvent.Publish(new FieldChangingEventArgs()
                 {
                     CanDisplay = !string.IsNullOrEmpty(origin) && !string.IsNullOrEmpty(destination)
                 });

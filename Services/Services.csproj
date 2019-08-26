@@ -68,7 +68,6 @@
     <Compile Include="Core\LocationType.cs" />
     <Compile Include="Core\QueryStringBuilder.cs" />
     <Compile Include="Core\StreamDto.cs" />
-    <Compile Include="Core\StringTools.cs" />
     <Compile Include="Directions\Directions.cs" />
     <Compile Include="Directions\IDirections.cs" />
     <Compile Include="GeoCoding\GeoCoding.cs" />

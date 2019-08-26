@@ -3,7 +3,7 @@
 namespace Services.Core
 {
     /// <summary>
-    /// Used to generate querys
+    /// Used to generate querys to access google api's
     /// </summary>
     public class QueryStringBuilder
     {

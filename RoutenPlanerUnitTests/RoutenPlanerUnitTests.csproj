@@ -99,9 +99,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Routenplaner\Routenplaner.csproj">
       <Project>{6222df03-ffb8-4e94-9a36-6a385c51ff40}</Project>
